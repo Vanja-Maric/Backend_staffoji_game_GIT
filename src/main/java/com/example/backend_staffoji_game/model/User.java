@@ -14,8 +14,7 @@ import lombok.NoArgsConstructor;
 @Entity
 
 @Schema(description = "All details about the step entity. ")
-@Table(name = "user")
-
+@Table(name = "Users")
 public class User {
 
     @Id
@@ -23,13 +22,13 @@ public class User {
     @Schema(description = "The database generated user ID")
     private long id;
 
-    @Column(name = "username")
+    @Column(unique = true, name = "username")
     @Schema(description = "User Id")
     private String username;
 
     @Column(name = "password")
     private String password;
 
-    @Column(name = "email")
+    @Column(unique = true,name = "email")
     private String email;
 }
