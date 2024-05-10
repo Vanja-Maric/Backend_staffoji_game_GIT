@@ -109,7 +109,25 @@ class UserServiceTest_IntegrationTest {
 
         // Assert
         assertTrue(result.isPresent());
-        assertFalse(result.get().isPremium(), String.valueOf(false));
+        assertEquals(result.get().isPremium(),false);
+    }
+    @Test
+    void checkingIsPremiumTrue() {
+        // Check if database is empty
+        assertTrue(databaseIsEmpty());
+
+        // Create a user
+        UserDto userTest = new UserDto("test", "test", "test", true);
+
+        // Save user
+        userService.createUser(userTest);
+
+        // Check if user is saved
+        var result = userRepository.findByUsername("test");
+
+        // Assert
+        assertTrue(result.isPresent());
+        assertEquals(result.get().isPremium(), userTest.isPremium());
     }
 
 
