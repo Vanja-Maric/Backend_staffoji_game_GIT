@@ -1,6 +1,7 @@
 package com.example.backend_staffoji_game.service;
 
 import com.example.backend_staffoji_game.dto.UserDto;
+import com.example.backend_staffoji_game.dto.UserPremiumStatusDto;
 import com.example.backend_staffoji_game.exception.UserAlreadyExistsException;
 import com.example.backend_staffoji_game.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -75,15 +76,13 @@ class UserServiceTest_IntegrationTest {
         // Check if database is empty
         assertTrue(databaseIsEmpty());
 
-
-
+        // Create a user and save it 100 times
         for (int i = 0; i < 100; i++) {
             // Create a user
             UserDto userTest = new UserDto("test" + i, "test" + i, "test" + i,false);
             // Save user
             userService.createUser(userTest);
         }
-
 
         // Check if user is saved
         var result = userRepository.findAll();
@@ -130,6 +129,29 @@ class UserServiceTest_IntegrationTest {
         assertEquals(result.get().isPremium(), userTest.isPremium());
     }
 
+
+    @Test
+    void createUser_UpdateToTrue() {
+        // Check if database is empty
+        assertTrue(databaseIsEmpty());
+
+        // Create a user
+        UserDto userTest = new UserDto("test", "test", "test");
+        UserPremiumStatusDto updateUser = new UserPremiumStatusDto(userTest.getUsername(), true);
+
+        // Save user
+        userService.createUser(userTest);
+
+        //update user to premium
+        userService.updateIsPremium(updateUser);
+
+        // Check if user is saved
+        var result = userRepository.findByUsername("test");
+
+        // Assert
+        assertTrue(result.isPresent());
+        assertEquals(result.get().isPremium(),true);
+    }
 
     @Test
     void getAllUsers() {
