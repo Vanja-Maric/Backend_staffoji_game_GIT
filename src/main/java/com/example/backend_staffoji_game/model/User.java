@@ -2,10 +2,7 @@ package com.example.backend_staffoji_game.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Type;
 
@@ -16,6 +13,7 @@ import org.hibernate.annotations.Type;
 @Entity
 @Schema(description = "All details about the step entity. ")
 @Table(name = "Users")
+@ToString
 public class User {
 
     @Id
@@ -34,6 +32,6 @@ public class User {
     private String email;
 
     @Schema(description = "Premium status of the user")
-    @Column(name = "is_premium", nullable = false, columnDefinition = "boolean default false")
+    @Column(name = "is_premium", nullable = false, columnDefinition = "bit default 0")
     private boolean isPremium;
 }

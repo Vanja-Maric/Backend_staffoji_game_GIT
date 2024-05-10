@@ -1,10 +1,13 @@
 package com.example.backend_staffoji_game.service;
 
+import com.example.backend_staffoji_game.dto.NotificationDto;
 import com.example.backend_staffoji_game.dto.UserDto;
 import com.example.backend_staffoji_game.dto.UserPremiumStatusDto;
 import com.example.backend_staffoji_game.exception.UserAlreadyExistsException;
 import com.example.backend_staffoji_game.exception.UserDoesNotExistsException;
+import com.example.backend_staffoji_game.model.Notification;
 import com.example.backend_staffoji_game.model.User;
+import com.example.backend_staffoji_game.repository.NotificationRepository;
 import com.example.backend_staffoji_game.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -87,4 +90,5 @@ public class UserService {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new UserDoesNotExistsException("User not found"));
     }
+
 }
