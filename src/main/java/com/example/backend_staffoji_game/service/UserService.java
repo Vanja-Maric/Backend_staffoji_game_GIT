@@ -1,11 +1,12 @@
 package com.example.backend_staffoji_game.service;
 
 import com.example.backend_staffoji_game.dto.UserDto;
+import com.example.backend_staffoji_game.dto.UserPremiumStatusDto;
 import com.example.backend_staffoji_game.exception.UserAlreadyExistsException;
+import com.example.backend_staffoji_game.exception.UserDoesNotExistsException;
 import com.example.backend_staffoji_game.model.User;
 import com.example.backend_staffoji_game.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -66,9 +67,20 @@ public class UserService {
         var findAll = userRepository.findAll();
 
         if (findAll.isEmpty()) {
-            throw new RuntimeException("No users found");
+            throw new UserDoesNotExistsException("No users found");
         } else {
             return findAll;
+        }
+    }
+
+    public UserPremiumStatusDto updateIsPremium(UserPremiumStatusDto userDto) {
+        var user = userRepository.findByUsername(userDto.getUsername());
+        if (!user.isPresent()) {
+            throw new UserDoesNotExistsException("User not found");
+        } else {
+            user.get().setPremium(userDto.isPremium());
+            userRepository.save(user.get());
+            return userDto;
         }
     }
 }

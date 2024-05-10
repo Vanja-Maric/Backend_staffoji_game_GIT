@@ -1,6 +1,7 @@
 package com.example.backend_staffoji_game.controller;
 
 import com.example.backend_staffoji_game.dto.UserDto;
+import com.example.backend_staffoji_game.dto.UserPremiumStatusDto;
 import com.example.backend_staffoji_game.model.User;
 import com.example.backend_staffoji_game.service.UserService;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -27,6 +28,7 @@ public class UserController {
         this.userService = userService;
     }
 
+
     @PostMapping("/")
     public ResponseEntity<UserDto> createNotification(@Valid final @RequestBody UserDto userDto) {
         return new ResponseEntity<>( userService.createUser(userDto), HttpStatus.CREATED);
@@ -35,6 +37,11 @@ public class UserController {
     @GetMapping("/")
     public ResponseEntity<List<User>> getAllUsers() {
         return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
+    }
+
+    @PutMapping("/")
+    public ResponseEntity<UserPremiumStatusDto> updateUser(@Valid final @RequestBody UserPremiumStatusDto userDto) {
+        return new ResponseEntity<>(userService.updateIsPremium(userDto), HttpStatus.OK);
     }
 
 }

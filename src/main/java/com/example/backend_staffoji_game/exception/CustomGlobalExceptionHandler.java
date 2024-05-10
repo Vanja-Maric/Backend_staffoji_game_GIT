@@ -15,4 +15,10 @@ public class CustomGlobalExceptionHandler {
     public ResponseEntity<Map<String, String>> handleUserAlreadyExistsException(UserAlreadyExistsException ex) {
         return new ResponseEntity<>(Collections.singletonMap("message", ex.getMessage()), HttpStatus.CONFLICT);
     }
+    @ExceptionHandler(UserDoesNotExistsException.class)
+    public ResponseEntity<Map<String, String>> handleUserDoesNotExistsException(UserDoesNotExistsException ex) {
+        return new ResponseEntity<>(Collections.singletonMap("message", ex.getMessage()), HttpStatus.NOT_FOUND);
+    }
+
+
 }
