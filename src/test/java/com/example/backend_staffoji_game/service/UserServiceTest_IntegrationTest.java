@@ -32,35 +32,12 @@ class UserServiceTest_IntegrationTest {
 
 
     @Test
-    void createUser_edgeCaseTest_checkingToAvoidRaceCondition() {
-        // Check if database is empty
-        assertTrue(databaseIsEmpty());
-
-
-
-        for (int i = 0; i < 100; i++) {
-            // Create a user
-            UserDto userTest = new UserDto("test" + i, "test" + i, "test" + i);
-            // Save user
-            userService.createUser(userTest);
-        }
-
-
-        // Check if user is saved
-        var result = userRepository.findAll();
-
-        // Assert
-        assertEquals(result.size(), 100);
-    }
-
-
-    @Test
     void createUser_positiveTest() {
         // Check if database is empty
         assertTrue(databaseIsEmpty());
 
         // Create a user
-        UserDto userTest = new UserDto("test", "test", "test");
+        UserDto userTest = new UserDto("test", "test", "test", false);
 
         // Save user
         userService.createUser(userTest);
@@ -81,16 +58,58 @@ class UserServiceTest_IntegrationTest {
         assertTrue(databaseIsEmpty());
 
         // Create a user
-        UserDto userTest = new UserDto("testNegative", "testNegative", "testNegative");
+        UserDto userTest = new UserDto("testNegative", "testNegative", "testNegative", false);
 
         // Save user
         userService.createUser(userTest);
 
         // Try to create another user with the same username and email
-        UserDto duplicateUser = new UserDto("testNegative", "testNegative", "testNegative");
+        UserDto duplicateUser = new UserDto("testNegative", "testNegative", "testNegative", false);
 
         // Assert that a UserAlreadyExistsException is thrown
         assertThrows(UserAlreadyExistsException.class, () -> userService.createUser(duplicateUser));
+    }
+
+    @Test
+    void createUser_edgeCaseTest_checkingToAvoidRaceCondition() {
+        // Check if database is empty
+        assertTrue(databaseIsEmpty());
+
+
+
+        for (int i = 0; i < 100; i++) {
+            // Create a user
+            UserDto userTest = new UserDto("test" + i, "test" + i, "test" + i,false);
+            // Save user
+            userService.createUser(userTest);
+        }
+
+
+        // Check if user is saved
+        var result = userRepository.findAll();
+
+        // Assert
+        assertEquals(result.size(), 100);
+    }
+
+
+    @Test
+    void createUser_checkingIsPremiumFalseDefault() {
+        // Check if database is empty
+        assertTrue(databaseIsEmpty());
+
+        // Create a user
+        UserDto userTest = new UserDto("test", "test", "test");
+
+        // Save user
+        userService.createUser(userTest);
+
+        // Check if user is saved
+        var result = userRepository.findByUsername("test");
+
+        // Assert
+        assertTrue(result.isPresent());
+        assertFalse(result.get().isPremium(), String.valueOf(false));
     }
 
 

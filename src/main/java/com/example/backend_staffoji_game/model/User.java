@@ -31,4 +31,8 @@ public class User {
 
     @Column(unique = true,name = "email")
     private String email;
+
+    @Schema(description = "Premium status of the user")
+    @Column(name = "is_premium", nullable = false, columnDefinition = "boolean default false")
+    private boolean isPremium;
 }

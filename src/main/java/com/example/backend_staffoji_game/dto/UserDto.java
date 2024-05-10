@@ -19,4 +19,13 @@ public class UserDto {
 
     @Schema(description = "User Email")
     private String email;
+
+    @Schema(description = "User Premium Status")
+    private boolean isPremium = false;
+
+    public UserDto(String username, String password, String email) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+    }
 }
