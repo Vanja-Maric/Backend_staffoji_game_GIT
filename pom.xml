@@ -21,6 +21,9 @@
         <swagger.version>2.3.0</swagger.version>
         <postgresql.version>42.7.0</postgresql.version>
         <h2-database.version>1.4.200</h2-database.version>
+        <hibernate-core.version>6.1.4.Final</hibernate-core.version>
+        <mysql-connector-java-version>8.0.28</mysql-connector-java-version>
+        <hibernate-validator>7.0.1.Final</hibernate-validator>
     </properties>
     <profiles>
         <profile>
@@ -51,6 +54,8 @@
         </profile>
     </profiles>
     <dependencies>
+
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
@@ -100,6 +105,24 @@
             <artifactId>h2</artifactId>
             <version>${h2-database.version}</version>
             <scope>test</scope>
+        </dependency>
+        <!--Hibernate-->
+        <dependency>
+            <groupId>org.hibernate.orm</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>${hibernate-core.version}</version>
+        </dependency>
+        <!-- mysql-connector-java -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql-connector-java-version}</version>
+        </dependency>
+        <!-- Hibernate Validator -->
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>${hibernate-validator}</version>
         </dependency>
 
 

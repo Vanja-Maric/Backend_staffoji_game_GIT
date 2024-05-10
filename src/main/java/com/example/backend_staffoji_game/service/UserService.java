@@ -57,6 +57,7 @@ public class UserService {
                 .username(userDto.getUsername())
                 .password(userDto.getPassword())
                 .email(userDto.getEmail())
+                .isPremium(userDto.isPremium())
                 .build();
         return user;
     }
