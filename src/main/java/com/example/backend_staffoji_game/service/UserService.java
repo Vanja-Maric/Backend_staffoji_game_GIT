@@ -65,22 +65,26 @@ public class UserService {
 
     public List<User> getAllUsers() {
         var findAll = userRepository.findAll();
+        checkIfUsersExist(findAll);
+        return findAll;
+    }
 
+    private static void checkIfUsersExist(List<User> findAll) {
         if (findAll.isEmpty()) {
             throw new UserDoesNotExistsException("No users found");
-        } else {
-            return findAll;
         }
     }
 
     public UserPremiumStatusDto updateIsPremium(UserPremiumStatusDto userDto) {
-        var user = userRepository.findByUsername(userDto.getUsername());
-        if (!user.isPresent()) {
-            throw new UserDoesNotExistsException("User not found");
-        } else {
-            user.get().setPremium(userDto.isPremium());
-            userRepository.save(user.get());
-            return userDto;
-        }
+        var user = findUserByUsername(userDto.getUsername());
+        user.setPremium(userDto.isPremium());
+        userRepository.save(user);
+        return userDto;
+
+    }
+
+    private User findUserByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserDoesNotExistsException("User not found"));
     }
 }
