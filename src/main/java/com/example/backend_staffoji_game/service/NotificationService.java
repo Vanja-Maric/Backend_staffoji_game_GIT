@@ -1,12 +1,14 @@
 package com.example.backend_staffoji_game.service;
 
 import com.example.backend_staffoji_game.dto.NotificationDto;
+import com.example.backend_staffoji_game.exception.UserAlreadyExistsException;
 import com.example.backend_staffoji_game.exception.UserDoesNotExistsException;
 import com.example.backend_staffoji_game.model.Notification;
 import com.example.backend_staffoji_game.repository.NotificationRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -15,8 +17,11 @@ public class NotificationService {
 
     private final NotificationRepository notificationRepository;
 
+
     public NotificationDto createNotification(NotificationDto notificationDto) {
         validateNotification(notificationDto);
+        checkIfTitleExists(notificationDto);
+        checkIfIsTimeInFuture(notificationDto);
         Notification notification = buildNotification(notificationDto);
         notificationRepository.save(notification);
         return notificationDto;
@@ -28,6 +33,20 @@ public class NotificationService {
         }
         if (notificationDto.getMessage() == null || notificationDto.getMessage().isEmpty()) {
             throw new RuntimeException("Message is required");
+        }
+    }
+
+    private void checkIfTitleExists(NotificationDto notificationDto) {
+        var notification = notificationRepository.findByTitle(notificationDto.getTitle());
+        if (notification.isPresent()) {
+            throw new UserDoesNotExistsException("Notification with this title already exists");
+        }
+    }
+
+    private void checkIfIsTimeInFuture(NotificationDto notificationDto) {
+        LocalDateTime now = LocalDateTime.now();
+        if (notificationDto.getSendTime() != null && (!notificationDto.isSendNow() && notificationDto.getSendTime().isBefore(now))) {
+            throw new UserAlreadyExistsException("Send time must be in the future");
         }
     }
 
